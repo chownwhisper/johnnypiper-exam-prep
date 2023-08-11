@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 suite('Home page', function() {
   test('Page title', async function() {
-    let res = await fetch("http://localhost:8888/");
+    let res = await fetch("http://localhost:8080/");
     let body = await res.text();
     
     // Debugging: Log the fetched HTML content
