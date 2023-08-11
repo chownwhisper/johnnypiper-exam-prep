@@ -24,6 +24,7 @@ jobs:
       run: npm run test:unit
 
   integration:
+    needs: [build]  # This ensures the build job is completed before integration
     runs-on: ubuntu-latest
 
     steps:
@@ -49,4 +50,3 @@ jobs:
       with:
         service-id: ${{ secrets.SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API }}
-
