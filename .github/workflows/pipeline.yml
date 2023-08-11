@@ -1,8 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Movies CI/CD
-
 on:
   push:
     branches: [ "main" ]
@@ -14,9 +9,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
-
     steps:
     - uses: actions/checkout@v3
+    
     - name: Use Node.js 14.x
       uses: actions/setup-node@v3
       with:
@@ -24,16 +19,16 @@ jobs:
         cache: 'npm'
         
     - name: Starting NPM INSTALL
-    - run: npm install
+      run: npm install
    
     - name: Running Unit Test
-    - run: npm run test:unit
+      run: npm run test:unit
     
     - name: Adding SoftUni User Name
-    - run: echo JohnnyPiper
+      run: echo JohnnyPiper
     
     - name: Deploy to Render 
       uses: johnbeynon/render-deploy-action@v0.0.8
       with:
         service-id: ${{ secrets.SERVICE_ID }}
-        api-key: ${{ secrets.RENDER_API }}    
+        api-key: ${{ secrets.RENDER_API }}
