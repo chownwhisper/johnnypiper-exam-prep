@@ -6,7 +6,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,12 +22,31 @@ jobs:
    
     - name: Running Unit Test
       run: npm run test:unit
-    
-    - name: Adding SoftUni User Name
-      run: echo JohnnyPiper
-    
+
+  integration:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14.x
+        cache: 'npm'
+
+    - name: Running Integration Tests
+      run: npm run test:integration
+
+  deploy:
+    needs: [integration]  # This ensures the integration job is completed before deployment
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
     - name: Deploy to Render 
       uses: johnbeynon/render-deploy-action@v0.0.8
       with:
         service-id: ${{ secrets.SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API }}
+
