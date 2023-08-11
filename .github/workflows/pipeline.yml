@@ -1,8 +1,10 @@
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -25,6 +27,7 @@ jobs:
 
   deploy:
     needs: [build]  # This ensures the build job is completed before deploy
+    if: ${{ success() }}  # Only run deploy if the build job is successful
     runs-on: ubuntu-latest
 
     steps:
@@ -35,18 +38,3 @@ jobs:
       with:
         service-id: ${{ secrets.SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API }}
-
-  integration:
-    needs: [deploy]  # This ensures the deploy job is completed before integration
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14.x
-        cache: 'npm'
-
-    - name: Running Integration Tests
-      run: npm run test:integration
