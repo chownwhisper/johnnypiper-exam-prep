@@ -22,8 +22,18 @@ jobs:
       with:
         node-version: 14.x
         cache: 'npm'
+        
+    - name: Starting NPM INSTALL
     - run: npm install
    
+    - name: Running Unit Test
     - run: npm run test:unit
     
+    - name: Adding SoftUni User Name
     - run: echo JohnnyPiper
+    
+    - name: Deploy to Render 
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API }}    
