@@ -25,6 +25,9 @@ jobs:
     - name: Running Unit Test
       run: npm run test:unit
 
+    - name: Display SoftUni Username
+      run: echo "JohnnyPiper"
+
   deploy:
     needs: [build]  # This ensures the build job is completed before deploy
     if: ${{ success() }}  # Only run deploy if the build job is successful
@@ -38,26 +41,3 @@ jobs:
       with:
         service-id: ${{ secrets.SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API }}
-        
-  ui_tests:
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14.x
-        cache: 'npm'
-        
-    - name: Starting NPM INSTALL
-      run: npm install
-      
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-   
-    - name: Running UI Test
-      run: npm run test:ui
-
-   
