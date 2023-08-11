@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     
     - name: Use Node.js 14.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
         node-version: 14.x
         cache: 'npm'
@@ -23,30 +23,30 @@ jobs:
     - name: Running Unit Test
       run: npm run test:unit
 
-  integration:
-    needs: [build]  # This ensures the build job is completed before integration
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
-        cache: 'npm'
-
-    - name: Running Integration Tests
-      run: npm run test:integration
-
   deploy:
-    needs: [integration]  # This ensures the integration job is completed before deployment
+    needs: [build]  # This ensures the build job is completed before deploy
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
 
     - name: Deploy to Render 
       uses: johnbeynon/render-deploy-action@v0.0.8
       with:
         service-id: ${{ secrets.SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API }}
+
+  integration:
+    needs: [deploy]  # This ensures the deploy job is completed before integration
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x
+        cache: 'npm'
+
+    - name: Running Integration Tests
+      run: npm run test:integration
